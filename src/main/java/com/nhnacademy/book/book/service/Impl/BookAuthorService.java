@@ -61,17 +61,17 @@ public class BookAuthorService {
         );
     }
 
-    public void deleteBookAuthor(Long bookAuthorId) {
-        if (!bookAuthorRepository.existsById(bookAuthorId)) {
+    public void deleteBookAuthor(BookAuthor bookAuthor) {
+        if (Objects.isNull(bookAuthor)) {
             throw new BookAuthorNotFoundException("BookAuthor not found");
         }
-        bookAuthorRepository.deleteById(bookAuthorId);
+        bookAuthorRepository.delete(bookAuthor);
     }
 
     public List<BookResponseDto> findBooksByAuthorId(Long authorId) {
         List<Book> books = bookAuthorRepository.findBooksByAuthorId(authorId);
 
-        if (!authorRepository.existsById(authorId)) {
+        if (books == null || books.isEmpty()) {
             throw new AuthorIdNotFoundException("Author id: " + authorId + " not found");
         }
 
@@ -88,7 +88,7 @@ public class BookAuthorService {
     public List<AuthorResponseDto> findAuthorsByBookId(Long bookId) {
         List<Author> authors = bookAuthorRepository.findAuthorsByBookId(bookId);
 
-        if (!bookRepository.existsById(bookId)) {
+        if (authors == null || authors.isEmpty()) {
             throw new BookNotFoundException("Book id: " + bookId + " not found");
         }
 
